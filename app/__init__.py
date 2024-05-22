@@ -1,33 +1,28 @@
-"""
-Initialization module for the Tasky application.
-
-This module sets up the Flask application, initializes the SQLAlchemy database, 
-and registers the necessary routes and blueprints.
-"""
-
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from dotenv import load_dotenv
+import os
 
-# Initialize the SQLAlchemy database instance
+# Load environment variables from .env file
+load_dotenv()
+
 db = SQLAlchemy()
 
 def create_app():
-    """
-    Factory function to create and configure the Flask application.
-
-    Returns:
-        app (Flask): The configured Flask application.
-    """
     app = Flask(__name__)
+
+    # Load configuration
     app.config.from_object('config.Config')
 
-    # Initialize database with the Flask app
+    # Initialize extensions
     db.init_app(app)
 
-    with app.app_context():
-        # Import routes
-        from .main import routes
-        # Create database tables if they don't exist
-        db.create_all()
+    # Register blueprints
+    from .main import bp as main_bp
+    app.register_blueprint(main_bp)
+
+    # Create the database if it doesn't exist
+    from .create_db import create_database
+    create_database()
 
     return app
