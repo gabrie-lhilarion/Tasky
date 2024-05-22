@@ -26,7 +26,7 @@ def create_app():
 
     with app.app_context():
         # Import routes
-        from . import routes
+        from .main import routes
         # Create database tables if they don't exist
         db.create_all()
 
