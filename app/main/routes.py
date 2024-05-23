@@ -4,7 +4,7 @@ from ..models import db, Task
 
 @bp.route('/', strict_slashes=False)
 def index():
-    return "Welcome to Tasky!"
+    return render_template('index.html', username='John Doe')
 
 @bp.route('/tasks', methods=['GET', 'POST'])
 def tasks():
