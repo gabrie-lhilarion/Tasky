@@ -6,7 +6,8 @@ from flask_login import LoginManager
 from dotenv import load_dotenv
 import os
 
-# Load environment variables from .env file
+# Load environment variables from .env file 
+
 load_dotenv()
 
 db = SQLAlchemy()
@@ -37,12 +38,15 @@ def create_app():
     from .create_db import create_database
     create_database()
 
+    from .models import User 
+
     from app.auth import auth as auth_bp
     app.register_blueprint(auth_bp)
 
+
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
+    
     return app
-
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
