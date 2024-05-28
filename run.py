@@ -1,14 +1,14 @@
 """
-Entry point for running the Tasky application.
+Entry point for running the Flask application.
 
-This module creates the Flask application instance and runs the development server.
+This script imports the create_app function to initialize and run the Flask application.
 """
 
 from app import create_app
 
-# Create the Flask application
+# Create an application instance using the factory function
 app = create_app()
 
-if __name__ == '__main__':
-    # Run the application in debug mode
+if __name__ == "__main__":
+    # Run the application
     app.run(debug=True)

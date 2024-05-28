@@ -1,10 +1,24 @@
+"""
+Script to create the database if it does not exist.
+
+This module contains a function to connect to the MySQL server and create the
+database defined in the environment variables if it does not already exist.
+"""
+
 import MySQLdb
 import os
 from dotenv import load_dotenv
 
+# Load environment variables from .env file
 load_dotenv()
 
 def create_database():
+    """
+    Create the database if it does not exist.
+
+    Connects to the MySQL server using credentials from environment variables
+    and creates the database specified by the 'DB_NAME' environment variable.
+    """
     # Database connection details
     DB_HOST = os.getenv('DB_HOST', 'localhost')
     DB_USER = os.getenv('DB_USER', 'yourusername')

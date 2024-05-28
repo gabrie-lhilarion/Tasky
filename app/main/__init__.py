@@ -1,5 +1,13 @@
+"""
+Initialization for the main blueprint.
+
+This module creates the Blueprint instance for main routes.
+"""
+
 from flask import Blueprint
 
+# Create a Blueprint instance for main routes
 bp = Blueprint('main', __name__)
 
-from . import routes
+# Import views to associate with this blueprint
+from app.main import views
