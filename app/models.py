@@ -17,6 +17,21 @@ class User(db.Model):
     password = db.Column(db.String(200), nullable=False)
     tasks = db.relationship('Task', backref='owner', lazy=True)
     projects = db.relationship('Project', secondary='team', backref='members', lazy=True)
+       # Flask-Login required properties and methods
+    @property
+    def is_active(self):
+        return True
+
+    @property
+    def is_authenticated(self):
+        return True
+
+    @property
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return str(self.id)
 
 class Task(db.Model):
     """
