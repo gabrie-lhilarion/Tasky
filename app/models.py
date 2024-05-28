@@ -5,6 +5,7 @@ This module defines the SQLAlchemy models for users, tasks, teams, and projects.
 """
 
 from . import db
+from datetime import datetime  # Import datetime module
 
 class User(db.Model):
     """
@@ -39,6 +40,7 @@ class Task(db.Model):
     """
     id = db.Column(db.Integer, primary_key=True)
     activity = db.Column(db.Text, nullable=True)
+    create_date = db.Column(db.DateTime, default=datetime.utcnow)
     due_date = db.Column(db.DateTime, nullable=True)
     status = db.Column(db.String(50), nullable=False, default='pending')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -58,6 +60,7 @@ class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
+    create_date = db.Column(db.DateTime, default=datetime.utcnow)
     deadline = db.Column(db.DateTime, nullable=True)
     status = db.Column(db.String(50), nullable=False, default='pending')
     tasks = db.relationship('Task', backref='project', lazy=True)
