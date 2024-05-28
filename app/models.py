@@ -11,6 +11,7 @@ class User(db.Model):
     User model representing a user of the application.
     """
     id = db.Column(db.Integer, primary_key=True)
+    fullname = db.Column(db.String(150), nullable=False)
     username = db.Column(db.String(150), unique=True, nullable=False)
     email = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)

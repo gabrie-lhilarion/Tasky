@@ -1,0 +1,105 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TASKY Login</title>
+    <style>
+        body, 
+        html {
+            padding: 0;
+            margin: 0;
+        }
+        .wrapper {
+            display: flex;
+            height: 100vh;
+        }
+        .taskify-hero {
+            width: 50%;
+            background-color: lightblue;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            text-align: center;
+        }
+        .taskify-hero h1 {
+            margin: 0;
+            padding: 0;
+        }
+         .taskify-hero p {
+            margin: 0;
+            padding: 0;
+        }
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            text-align: left;
+            width: 50%;
+            
+        }
+        .login-form  form{
+            background-color: azure;
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+        }
+
+         .login-form  input[type=text],
+          .login-form  input[type=password] {
+           width: 95%;
+           padding: 8px;
+        }
+        .login-form table {
+            width: 100%;
+        }
+         .login-form td {
+           padding: 10px;
+        }
+        .register-btn {
+            background-color: blue;  
+            color: aliceblue;
+            padding: 12px;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+        .login-register {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+
+        <section class="taskify-hero">
+            <div>
+                <h1>
+                    TASKIFY
+                </h1>
+                <p>A top-notch project management system</p>
+            </div>
+        </section>
+
+        <section class="login-form">
+            <form method="POST" action="{{ url_for('auth.register') }}">
+                 <h1>Register</h1>
+                <table>
+                    {{ form.hidden_tag() }}
+                    <p>{{ form.fullname.label }} {{ form.fullname() }}</p>
+                    <p>{{ form.username.label }} {{ form.username() }}</p>
+                    <p>{{ form.email.label }} {{ form.email() }}</p>
+                    <p>{{ form.password.label }} {{ form.password() }}</p>
+                    <p>{{ form.confirm_password.label }} {{ form.confirm_password() }}</p>
+                    <p class="login-register">
+                        <input class="register-btn" type="submit" value="Register">
+                         <a href="{{ url_for('auth.login') }}"> Already have an account? Login instead</a>
+                    </p>
+                </table>
+            </form>
+        </section>
+
+    </div>
+</body>
+</html>
