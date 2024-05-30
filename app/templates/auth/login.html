@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>TASKY Login</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
         body, 
         html {
@@ -66,11 +67,39 @@
             display: flex;
             justify-content: space-between;
         }
+        .close-flash-wrap {
+           padding:0;
+           margin:0;
+           top: 0;
+           position: fixed;
+           z-index: 200;
+        }
+        .flash-message {
+            display: flex;
+            justify-content: space-between;
+        }
+        .close-flash {
+            color: red;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <div class="wrapper">
+    <div class="close-flash-wrapper">
 
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} flash-message">
+                        <span> {{ message }} </span>  
+                        <span class="close-flash"> &times; </span> 
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+    <div class="wrapper">
         <section class="taskify-hero">
             <div>
                 <h1>
@@ -99,5 +128,14 @@
         </section>
 
     </div>
+
+    <script>
+        const flashMessages = document.querySelectorAll(".close-flash")
+        flashMessages.forEach( 
+            message => message.addEventListener(
+                'click', e => e.target.parentElement.remove()
+            )
+        )
+    </script>
 </body>
 </html>

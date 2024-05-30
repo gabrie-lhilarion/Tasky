@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Tasky{% endblock %}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -14,7 +15,7 @@
                 {% if current_user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link"> 
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="blue" class="bi bi-person-circle" viewBox="0 0 16 16">
                             <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
                             <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
                             </svg>
@@ -45,5 +46,55 @@
         {% endwith %}
         {% block content %}{% endblock %}
     </div>
+    
+    <section class="projects-wrapper"> 
+        <aside class="projects">
+            <h6 style="text-transform: uppercase;">{{ current_user.fullname }}'s projects</h6>
+   
+    
+    {% if projects %}
+        <ul class="list-group">
+            {% for project in projects %}
+                <li class="list-group-item">
+                    <h3>{{ project.title }}</h3>
+                    <p>{{ project.description }}</p>
+                    <p><strong>Deadline:</strong> {{ project.deadline }}</p>
+                    <p><strong>Status:</strong> {{ project.status }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No projects found. Project will display here.</p>
+    {% endif %}
+    
+    
+        </aside>
+        <main class="project-details"> 
+             <h2>Start New Project</h2>
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.title.label }}<br>
+            {{ form.title(size=32, class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.description.label }}<br>
+            {{ form.description(rows=5, class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.deadline.label }}<br>
+            {{ form.deadline(class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
+
+        </main>
+    </section>
+    
+
+ 
+
 </body>
 </html>

@@ -5,7 +5,8 @@ This module contains routes and view functions for handling login,
 registration, and logout functionality.
 """
 
-from flask import render_template, redirect, url_for, flash
+# from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, current_user
 from app import db, bcrypt
 from app.auth import bp
@@ -51,6 +52,7 @@ def register():
         user = User(fullname=form.fullname.data, username=form.username.data, email=form.email.data, password=hashed_password)
         db.session.add(user)
         db.session.commit()
+        
         flash('Your account has been created! You are now able to log in', 'success')
         return redirect(url_for('auth.login'))
     return render_template('auth/register.html', title='Register', form=form)

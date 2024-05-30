@@ -4,7 +4,7 @@ from ..models import db, Task
 
 @bp.route('/', strict_slashes=False)
 def index():
-    return render_template('index.html', username='John Doe')
+    return render_template('index.html')
 
 @bp.route('/tasks', methods=['GET', 'POST'])
 def tasks():
@@ -18,3 +18,4 @@ def tasks():
     
     tasks = Task.query.all()
     return render_template('tasks.html', tasks=tasks)
+

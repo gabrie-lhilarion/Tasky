@@ -1,0 +1,23 @@
+.projects-wrapper {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    margin: auto;
+
+}
+
+.projects {
+    background-color: #dbe4ee;
+    width: 29%;
+    padding: 20px;
+    margin-top: 30px;
+    border-radius: 5px;
+}
+
+.project-details {
+    background-color: #f8f9fa;
+    width: 69%;
+    padding: 20px;
+    margin-top: 30px;
+    border-radius: 5px;
+}
