@@ -21,3 +21,32 @@
     margin-top: 30px;
     border-radius: 5px;
 }
+
+.new-project {
+    display: none;
+}
+
+.show-project-form-btn {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 25px;
+}
+
+.show-project-form-btn p {
+    text-align: center;
+    width: 300px;
+
+}
+
+.show-project-form-btn small {
+    display: block;
+}
+
+.show-project-form-btn button {
+    background-color: blue;
+    color: azure;
+    border: none;
+    padding: 5px;
+    border-radius: 6px;
+    margin: auto;
+}

@@ -44,7 +44,7 @@ def create_app():
     login_manager.init_app(app)
 
     # Register blueprints
-    from app.main import bp as main_bp
+    from app.main import main as main_bp
     app.register_blueprint(main_bp, url_prefix='/')
     
     from app.auth import bp as auth_bp
