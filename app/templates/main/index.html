@@ -60,7 +60,12 @@
                     <p>{{ project.description }}</p>
                     <p><strong>Deadline:</strong> {{ project.deadline }}</p>
                     <p><strong>Status:</strong> {{ project.status }}</p>
-                    <p><a href="{{ url_for('main.project_detail', project_id=project.id) }}">Add Tasks</a></p>
+                    <p>
+                        <a href="{{ url_for('main.project_detail', project_id=project.id) }}"> 
+                            <strong class="num-tasks">Tasks in project ({{ project.tasks|length }}) </strong> 
+                           <button class="add-task-btn">View Project </button> 
+                        </a>
+                    </p>
                 </li>
             {% endfor %}
         </ul>

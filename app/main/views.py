@@ -26,6 +26,8 @@ def index():
                     deadline=form.deadline.data,
                     status='pending'
                 )
+
+                project.members.append(current_user)
                 db.session.add(project)
                 db.session.commit()
                 flash('Project created successfully!', 'success')
@@ -38,7 +40,7 @@ def index():
             flash('Form validation failed.', 'danger')
             print(f'Form errors: {form.errors}')
 
-    projects = Project.query.all()
+    projects = Project.query.filter(Project.members.any(id=current_user.id)).all()  # Filter projects by current user
     return render_template('main/index.html', form=form, projects=projects)
 
 @main.route('/project/<int:project_id>', methods=['GET', 'POST'], endpoint='project_detail')

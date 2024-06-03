@@ -50,3 +50,19 @@
     border-radius: 6px;
     margin: auto;
 }
+
+.num-tasks {
+    padding-right: 10px;
+    font-weight: bold;
+}
+
+.project-task-team {
+    padding: 5px;
+    background: #f8f9fa;
+}
+
+#home,
+#profile {
+    padding: 20px;
+    min-height: 200px;
+}
