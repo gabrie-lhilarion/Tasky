@@ -9,7 +9,8 @@ from flask_login import login_required, current_user
 from app import db
 from app.main import main
 from app.main.forms import ProjectForm, TaskForm
-from app.models import Project, Task
+from app.models import Project, Task, User
+from app.main.forms import UpdateTaskForm
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -52,20 +53,24 @@ def project_detail(project_id):
     if request.method == 'POST':
         try:
             if form.validate_on_submit():
-                task = Task(
-                    activity=form.activity.data,
-                    due_date=form.due_date.data if form.due_date.data else None,
-                    status='pending',
-                    owner=current_user,
-                    project=project
-                )
-                db.session.add(task)
-                db.session.commit()
-                flash('Task added successfully!', 'success')
-                return redirect(url_for('main.project_detail', project_id=project_id))
+                assignee_id = form.assignee.data  # Retrieve assignee ID from the form
+                if assignee_id:  # Check if an assignee is selected
+                    task = Task(
+                        activity=form.activity.data,
+                        due_date=form.due_date.data,
+                        status='pending',
+                        assignee=assignee_id,  # Associate the selected assignee with the task
+                        owner=current_user,
+                        project=project
+                    )
+                    db.session.add(task)
+                    db.session.commit()
+                    flash('Task added successfully!', 'success')
+                    return redirect(url_for('main.project_detail', project_id=project_id))
+                else:
+                    flash('Please select an assignee for the task.', 'danger')
             else:
                 flash('Form validation failed', 'danger')
-                
         except Exception as e:
             flash(f"An error occurred: {str(e)}", 'danger')
     
@@ -73,6 +78,38 @@ def project_detail(project_id):
     for field, errors in form.errors.items():
         for error in errors:
             flash(f"Error in {getattr(form, field).label.text}: {error}", 'danger')
+
+    for task in project.tasks:
+        task.assignee_name = User.query.get(task.assignee).fullname
     
     return render_template('main/project_detail.html', project=project, form=form)
 
+
+@main.route('/task/<int:task_id>/update', methods=['GET', 'POST'])
+@login_required
+@login_required
+def update_task(task_id):
+    task = Task.query.get_or_404(task_id)
+    project = Project.query.get_or_404(task.project_id)
+    
+    form = UpdateTaskForm(obj=task)
+    
+    # Populate the assignee field with users
+    form.assignee.choices = [(user.id, user.username) for user in User.query.all()]
+
+    if form.validate_on_submit():
+        task.activity = form.activity.data
+        task.due_date = form.due_date.data
+        task.assignee = form.assignee.data
+        db.session.commit()
+        flash('Task updated successfully!', 'success')
+        return redirect(url_for('main.project_detail', project_id=task.project_id))
+    
+    return render_template('main/update_task.html', form=form, task=task)
+
+
+@main.route('/task/<int:task_id>/delete', methods=['POST'])
+@login_required
+def delete_task(task_id):
+    # Logic to delete the task
+    return redirect(url_for('main.project_detail', project_id=task.project_id))

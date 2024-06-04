@@ -66,3 +66,8 @@
     padding: 20px;
     min-height: 200px;
 }
+
+.task_update_delete {
+    display: flex;
+    justify-content: space-between;
+}
