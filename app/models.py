@@ -4,8 +4,8 @@ Database models for the Tasky application.
 This module defines the SQLAlchemy models for users, tasks, teams, and projects.
 """
 
-from . import db
 from datetime import datetime  # Import datetime module
+from . import db
 
 class User(db.Model):
     """
@@ -16,9 +16,11 @@ class User(db.Model):
     username = db.Column(db.String(150), unique=True, nullable=False)
     email = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
+    
     tasks = db.relationship('Task', backref='owner', lazy=True)
     projects = db.relationship('Project', secondary='team', backref='members', lazy=True)
-       # Flask-Login required properties and methods
+    
+    # Flask-Login required properties and methods
     @property
     def is_active(self):
         return True
@@ -43,9 +45,15 @@ class Task(db.Model):
     create_date = db.Column(db.DateTime, default=datetime.utcnow)
     due_date = db.Column(db.DateTime, nullable=True)
     status = db.Column(db.String(50), nullable=False, default='pending')
-    assignee = db.Column(db.Integer, nullable=False)
+    
+    assignee_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    assignee = db.relationship('User', foreign_keys=[assignee_id], backref='assigned_tasks')
+    
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=False)
+    owner = db.relationship('User', foreign_keys=[user_id], backref='owned_tasks')
+    
+    project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=True)
+    project = db.relationship('Project', backref='project_tasks')
 
 class Team(db.Model):
     """
@@ -64,4 +72,6 @@ class Project(db.Model):
     create_date = db.Column(db.DateTime, default=datetime.utcnow)
     deadline = db.Column(db.DateTime, nullable=True)
     status = db.Column(db.String(50), nullable=False, default='pending')
+    
     tasks = db.relationship('Task', backref='project', lazy=True)
+    members = db.relationship('User', secondary='team', backref='user_projects', lazy=True)
