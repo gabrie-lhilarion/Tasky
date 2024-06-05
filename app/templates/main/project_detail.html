@@ -129,7 +129,7 @@
                 <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                    <h3>Team Members</h3>
                    <ul class="list-group">
-                       {% for member in team_members %}
+                       {% for member in  project.members %}
                            <li class="list-group-item">{{ member.username }}</li>
                        {% endfor %}
                    </ul>
@@ -147,22 +147,32 @@
                 {% for task in project.tasks %}
                     <li class="list-group-item">
                         <p>{{ task.activity }}</p>
+
                         <p><strong>Due Date:</strong> {{ task.due_date }}</p>
+
                         <p><strong>Status:</strong> {{ task.status }}</p>
+
                         {% if task.assignee %}
                             <p><strong>Assignee:</strong> {{ task.assignee_name }}</p>
                         {% else %}
                                 <p><strong>Assignee:</strong> None</p>
                         {% endif %}
-                        </p>
-                        <p class="task_update_delete">
+                        
+
+                        <div class="task_update_delete">
                             <!-- Link to task update form -->
                            <a href="{{ url_for('main.update_task', task_id=task.id) }}" class="btn btn-primary">Update</a>
                            
-                           <!-- Link to task delete page -->
-                           <a href="{{ url_for('main.delete_task', task_id=task.id) }}" class="btn btn-danger">Delete</a>
-                       </li>
-                        </p>
+                           <!-- Form to delete task-->
+                            <p>
+                                <form action="{{ url_for('main.delete_task', task_id=task.id) }}" method="POST">
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </p>
+                           
+                        </div>
+                    </li>
+                         
                 {% endfor %}
             </ul>
         </main>

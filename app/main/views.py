@@ -9,7 +9,7 @@ from flask_login import login_required, current_user
 from app import db
 from app.main import main
 from app.main.forms import ProjectForm, TaskForm
-from app.models import Project, Task, User
+from app.models import Project, Task, User, Team
 from app.main.forms import UpdateTaskForm
 
 
@@ -58,7 +58,7 @@ def project_detail(project_id):
                     task = Task(
                         activity=form.activity.data,
                         due_date=form.due_date.data,
-                        status='pending',
+                        status = form.status.data,
                         assignee=assignee_id,  # Associate the selected assignee with the task
                         owner=current_user,
                         project=project
@@ -100,6 +100,7 @@ def update_task(task_id):
     if form.validate_on_submit():
         task.activity = form.activity.data
         task.due_date = form.due_date.data
+        task.status = form.status.data
         task.assignee = form.assignee.data
         db.session.commit()
         flash('Task updated successfully!', 'success')
@@ -111,5 +112,27 @@ def update_task(task_id):
 @main.route('/task/<int:task_id>/delete', methods=['POST'])
 @login_required
 def delete_task(task_id):
-    # Logic to delete the task
-    return redirect(url_for('main.project_detail', project_id=task.project_id))
+    task = Task.query.get_or_404(task_id)
+    project_id = task.project_id
+    assignee_id = task.assignee
+    
+    try:
+        db.session.delete(task)
+        db.session.commit()
+        
+        # Check if the assignee has any other tasks in the project
+        other_tasks = Task.query.filter_by(project_id=project_id, assignee=assignee_id).count()
+        
+        if other_tasks == 0:
+            # If no other tasks, remove the assignee from the project
+            team_member = Team.query.filter_by(user_id=assignee_id, project_id=project_id).first()
+            if team_member:
+                db.session.delete(team_member)
+                db.session.commit()
+        
+        flash('Task deleted successfully!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error deleting task: {e}', 'danger')
+    
+    return redirect(url_for('main.project_detail', project_id=project_id))

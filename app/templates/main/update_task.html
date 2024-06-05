@@ -64,6 +64,8 @@
             <div class="form-group">
                 {{ form.assignee.label }}<br>
                 {{ form.assignee(class="form-control") }}
+                {{ form.status.label }}
+                {{ form.status(class="form-control") }}
                 {% if form.assignee.errors %}
                     <div class="text-danger">
                         {% for error in form.assignee.errors %}
