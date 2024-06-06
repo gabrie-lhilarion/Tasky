@@ -14,17 +14,17 @@ class ProjectForm(FlaskForm):
 class TaskForm(FlaskForm):
     activity = TextAreaField('Task', validators=[DataRequired()])
     due_date = DateTimeLocalField('Due Date', format='%Y-%m-%dT%H:%M', validators=[DataRequired()])
-    assignee = SelectField('Assign to', coerce=int, validators=[DataRequired()])
+    assignee_id = SelectField('Assign to', coerce=int, validators=[DataRequired()])
     status = SelectField('Status', choices=[('pending', 'Pending'), ('completed', 'Completed')], validators=[DataRequired()])
     submit = SubmitField('Add Task')
 
     def __init__(self, *args, **kwargs):
         super(TaskForm, self).__init__(*args, **kwargs)
-        self.assignee.choices = [(user.id, user.username) for user in User.query.all()]
+        self.assignee_id.choices = [(user.id, user.username) for user in User.query.all()]
 
 class UpdateTaskForm(FlaskForm):
     activity = TextAreaField('Task', validators=[DataRequired()])
     due_date = DateTimeField('Due Date', format='%Y-%m-%dT%H:%M', validators=[Optional()])
-    assignee = SelectField('Assignee', coerce=int, validators=[DataRequired()])
+    assignee_id = SelectField('Assignee', coerce=int, validators=[DataRequired()])
     status = SelectField('Status', choices=[('pending', 'Pending'), ('completed', 'Completed')], validators=[DataRequired()])
     submit = SubmitField('Update Task')

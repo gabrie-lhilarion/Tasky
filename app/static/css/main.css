@@ -20,6 +20,33 @@
     padding: 20px;
     margin-top: 30px;
     border-radius: 5px;
+    display: flex;
+}
+
+.project-list {
+    width: 69%;
+    padding: 20px;
+    margin-top: 30px;
+    border-radius: 5px;
+}
+
+.project-details .my_activities {
+    background-color: #ddd;
+    width: 45%;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.project-details .my_activities h1 {
+    font-size: 1.5em;
+    border-bottom: solid 1px #555;
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+.project-details .start_and_form {
+    width: 55%;
+    border-radius: 5px;
 }
 
 .new-project {

@@ -10,9 +10,15 @@ class User(db.Model):
     username = db.Column(db.String(150), unique=True, nullable=False)
     email = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
-    tasks = db.relationship('Task', backref='owner', lazy=True)
-    projects = db.relationship('Project', secondary='team', backref=db.backref('members', lazy='dynamic'), lazy='dynamic')
     
+    # Relationship for tasks where the user is the owner
+    tasks = db.relationship('Task', backref='owner', lazy=True, foreign_keys='Task.user_id')
+    
+    # Relationship for tasks where the user is the assignee
+    assigned_tasks = db.relationship('Task', backref='assignee', lazy=True, foreign_keys='Task.assignee_id')
+    
+    projects = db.relationship('Project', secondary='team', backref=db.backref('members', lazy='dynamic'), lazy='dynamic')
+
     @property
     def is_active(self):
         return True
@@ -37,8 +43,13 @@ class Task(db.Model):
     create_date = db.Column(db.DateTime, default=datetime.utcnow)
     due_date = db.Column(db.DateTime, nullable=True)
     status = db.Column(db.String(50), nullable=False, default='pending')
-    assignee = db.Column(db.Integer, nullable=False)
+    
+    # Foreign key to the user who created the task (owner)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    
+    # Foreign key to the user to whom the task is assigned
+    assignee_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    
     project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=False)
 
 class Team(db.Model):

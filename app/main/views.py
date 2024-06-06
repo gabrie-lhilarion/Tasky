@@ -40,9 +40,10 @@ def index():
         else:
             flash('Form validation failed.', 'danger')
             print(f'Form errors: {form.errors}')
-
+  
+    assigned_tasks = Task.query.filter_by(assignee_id=current_user.id).all()    # Fetch the tasks assigned to the current user
     projects = Project.query.filter(Project.members.any(id=current_user.id)).all()  # Filter projects by current user
-    return render_template('main/index.html', form=form, projects=projects)
+    return render_template('main/index.html', form=form, projects=projects, assigned_tasks=assigned_tasks)
 
 @main.route('/project/<int:project_id>', methods=['GET', 'POST'], endpoint='project_detail')
 @login_required
@@ -53,13 +54,13 @@ def project_detail(project_id):
     if request.method == 'POST':
         try:
             if form.validate_on_submit():
-                assignee_id = form.assignee.data  # Retrieve assignee ID from the form
+                assignee_id = form.assignee_id.data  # Retrieve assignee ID from the form
                 if assignee_id:  # Check if an assignee is selected
                     task = Task(
                         activity=form.activity.data,
                         due_date=form.due_date.data,
-                        status = form.status.data,
-                        assignee=assignee_id,  # Associate the selected assignee with the task
+                        status = 'pending',
+                        assignee_id = assignee_id,  # Associate the selected assignee with the task
                         owner=current_user,
                         project=project
                     )
@@ -80,7 +81,7 @@ def project_detail(project_id):
             flash(f"Error in {getattr(form, field).label.text}: {error}", 'danger')
 
     for task in project.tasks:
-        task.assignee_name = User.query.get(task.assignee).fullname
+        task.assignee_name = User.query.get(task.assignee_id).fullname
     
     return render_template('main/project_detail.html', project=project, form=form)
 
@@ -95,13 +96,13 @@ def update_task(task_id):
     form = UpdateTaskForm(obj=task)
     
     # Populate the assignee field with users
-    form.assignee.choices = [(user.id, user.username) for user in User.query.all()]
+    form.assignee_id.choices = [(user.id, user.username) for user in User.query.all()]
 
     if form.validate_on_submit():
         task.activity = form.activity.data
         task.due_date = form.due_date.data
         task.status = form.status.data
-        task.assignee = form.assignee.data
+        task.assignee_id = form.assignee_id.data
         db.session.commit()
         flash('Task updated successfully!', 'success')
         return redirect(url_for('main.project_detail', project_id=task.project_id))

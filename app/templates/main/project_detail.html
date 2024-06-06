@@ -111,15 +111,20 @@
                             {% endif %}
                         </div>
                         <div class="form-group">
-                            {{ form.assignee.label }}<br>
-                            {{ form.assignee(class="form-control") }}
-                            {% if form.assignee.errors %}
+                            {{ form.assignee_id.label }}<br>
+                            {{ form.assignee_id(class="form-control") }}
+                            {% if form.assignee_id.errors %}
                                 <div class="text-danger">
-                                    {% for error in form.assignee.errors %}
+                                    {% for error in form.assignee_id.errors %}
                                         <p>{{ error }}</p>
                                     {% endfor %}
                                 </div>
                             {% endif %}
+                        </div>
+                        <div class="form-group">
+                            {{ form.status.label }}<br>
+                            {{ form.status(class="form-control") }}
+                         
                         </div>
                         <div class="form-group">
                             {{ form.submit(class="btn btn-primary") }}
@@ -129,19 +134,16 @@
                 <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                    <h3>Team Members</h3>
                    <ul class="list-group">
-                       {% for member in  project.members %}
-                           <li class="list-group-item">{{ member.username }}</li>
+                        {% for task in project.tasks %}
+                           <li class="list-group-item">{{ task.assignee_name }}</li>
                        {% endfor %}
                    </ul>
                 </div>
                 </div>
             </div>
         </aside>
-        <main class="project-details"> 
-            {% if task in project.tasks %}
-                <span> {{project.tasks|length}} tasks</span>
-            {% endif %}
-
+        <main class="project-list"> 
+           
             <h3>Tasks</h3>
             <ul class="list-group">
                 {% for task in project.tasks %}
@@ -152,7 +154,7 @@
 
                         <p><strong>Status:</strong> {{ task.status }}</p>
 
-                        {% if task.assignee %}
+                        {% if task.assignee_id %}
                             <p><strong>Assignee:</strong> {{ task.assignee_name }}</p>
                         {% else %}
                                 <p><strong>Assignee:</strong> None</p>
