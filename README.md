@@ -25,12 +25,13 @@
 ```
 
 ### CONTRIBUTING
-**Feel free to contribute to this application**
+```Feel free to contribute to this application```
 
 ### LICENSE
-**MIT**
+
+```MIT```
 
 
 ### A SHORT STORY
-**Before I began to work on this project I was playing a lot with the server. I created several configuration files, tried to create sub-domains and so on. I had the server in a bad shape. So even though Gunicorn was running, if I visited my application IP address, with the corect port  I saw a different application- one of the applications I deployed earlier. 
-Bear in mind that I had disabled and removed every unsed configuration in the ‘sites-enabled’ and  ‘sites-available’ folders. The error was: a file I could not locate was still  referencing a configuration file I had delete from the sites-enabled folder. After several hour of frustration I uninstalled NGINX and reinstalled it, and boom, my site was live.**
+```Before I began to work on this project I was playing a lot with the server. I created several configuration files, tried to create sub-domains and so on. I had the server in a bad shape. So even though Gunicorn was running, if I visited my application IP address, with the corect port  I saw a different application- one of the applications I deployed earlier. 
+Bear in mind that I had disabled and removed every unsed configuration in the ‘sites-enabled’ and  ‘sites-available’ folders. The error was: a file I could not locate was still  referencing a configuration file I had delete from the sites-enabled folder. After several hour of frustration I uninstalled NGINX and reinstalled it, and boom, my site was live.``
