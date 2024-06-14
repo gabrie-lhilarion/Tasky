@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Tasky{% endblock %}</title>
+    {{ moment.include_moment() }}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
@@ -49,23 +50,28 @@
     
     <section class="projects-wrapper"> 
         <aside class="projects">
-            <h6 style="text-transform: uppercase;">{{ current_user.fullname }}'s projects</h6>
+            <h6 style="text-transform: uppercase; height: 40px; line-height: 45px;">{{ current_user.fullname }}'s projects</h6>
    
     
     {% if projects %}
         <ul class="list-group">
             {% for project in projects %}
-                <li class="list-group-item">
+                <li class="list-group-item {% if(loop.index % 2 == 0) %} bg-myblue{% else %} b-grey{% endif %}">
+
                     <h3>{{ project.title }}</h3>
                     <p>{{ project.description }}</p>
-                    <p><strong>Deadline:</strong> {{ project.deadline }}</p>
-                    <p><strong>Status:</strong> {{ project.status }}</p>
-                    <p>
-                        <a href="{{ url_for('main.project_detail', project_id=project.id) }}"> 
-                            <strong class="num-tasks">Tasks in project ({{ project.tasks|length }}) </strong> 
-                           <button class="add-task-btn">View Project </button> 
-                        </a>
+                    <p class="text-sm-start fs-6">
+                        <strong>Due:</strong> {{ moment(project.deadline ).format('MMMM Do YY, h:mm:ss a') }}
+                        <strong>Status:</strong> {{ project.status }}
                     </p>
+                    <p class="action-links">
+                        <a href="{{ url_for('main.project_detail', project_id=project.id) }}"> 
+                            <strong class="num-tasks">Tasks ({{ project.tasks|length }}) view/add</strong>
+                        </a>
+                        <a href="{{ url_for('main.update_project', project_id=project.id) }}">Edit Project</a>
+                    </p>
+                
+                    
                 </li>
             {% endfor %}
         </ul>
@@ -117,7 +123,7 @@
                         <li class="list-group-item">
                             <h4>{{ task.activity }}</h4>
                             <p><strong>Project:</strong> {{ task.project.title }}</p>
-                            <p><strong>Due Date:</strong> {{ task.due_date }}</p>
+                            <p><strong>Due Date:</strong> {{ moment(task.due_date).format('MMMM Do YYYY, h:mm:ss a') }}</p>
                             <p><strong>Status:</strong> {{ task.status }}</p>
                             <p><strong>Owner:</strong> {{ task.owner.username }}</p>
                         </li>

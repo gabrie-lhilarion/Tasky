@@ -4,13 +4,12 @@ View functions for main application routes.
 This module contains the routes and view functions for the main section of the application.
 """
 
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user
 from app import db
 from app.main import main
-from app.main.forms import ProjectForm, TaskForm
+from app.main.forms import ProjectForm, UpdateProjectForm, TaskForm, UpdateTaskForm
 from app.models import Project, Task, User, Team
-from app.main.forms import UpdateTaskForm
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -84,6 +83,31 @@ def project_detail(project_id):
         task.assignee_name = User.query.get(task.assignee_id).fullname
     
     return render_template('main/project_detail.html', project=project, form=form)
+
+
+@main.route('/project/<int:project_id>/update', methods=['GET', 'POST'])
+@login_required
+def update_project(project_id):
+    project = Project.query.get_or_404(project_id)
+    form = UpdateProjectForm(obj=project)
+    
+    if form.validate_on_submit():
+        try:
+            project.title = form.title.data
+            project.description = form.description.data
+            project.deadline = form.deadline.data
+            db.session.commit()
+            flash('Project updated successfully!', 'success')
+            return redirect(url_for('main.project_detail', project_id=project_id))
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Error updating project: {e}', 'danger')
+    
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(f"Error in {getattr(form, field).label.text}: {error}", 'danger')
+    
+    return render_template('main/update_project.html', project=project, form=form)
 
 
 @main.route('/task/<int:task_id>/update', methods=['GET', 'POST'])

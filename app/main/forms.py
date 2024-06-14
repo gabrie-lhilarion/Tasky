@@ -11,6 +11,12 @@ class ProjectForm(FlaskForm):
     deadline = DateTimeField('Deadline', format='%Y-%m-%d %H:%M:%S')
     submit = SubmitField('Create Project')
 
+class UpdateProjectForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    description = TextAreaField('Description', validators=[DataRequired()])
+    deadline = DateTimeLocalField('Deadline', format='%Y-%m-%dT%H:%M', validators=[DataRequired()])
+    submit = SubmitField('Update Project')
+
 class TaskForm(FlaskForm):
     activity = TextAreaField('Task', validators=[DataRequired()])
     due_date = DateTimeLocalField('Due Date', format='%Y-%m-%dT%H:%M', validators=[DataRequired()])

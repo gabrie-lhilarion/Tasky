@@ -11,6 +11,7 @@ from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from dotenv import load_dotenv
+from flask_moment import Moment
 import os
 
 # Load environment variables from .env file
@@ -21,6 +22,7 @@ db = SQLAlchemy()
 migrate = Migrate()
 bcrypt = Bcrypt()
 login_manager = LoginManager()
+moment = Moment()
 login_manager.login_view = 'auth.login'  # Redirect to 'auth.login' for login
 login_manager.login_message_category = 'info'  # Bootstrap alert category for login messages
 
@@ -42,6 +44,7 @@ def create_app():
     migrate.init_app(app, db)
     bcrypt.init_app(app)
     login_manager.init_app(app)
+    moment.init_app(app)
 
     # Register blueprints
     from app.main import main as main_bp
